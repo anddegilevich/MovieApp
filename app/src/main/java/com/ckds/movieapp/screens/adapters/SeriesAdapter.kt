@@ -9,19 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ckds.movieapp.R
 import com.ckds.movieapp.data.model.Movie
-import com.ckds.movieapp.utils.Constants.Companion.POSTER_BASE_URL
+import com.ckds.movieapp.data.model.Series
+import com.ckds.movieapp.utils.Constants
 import kotlinx.android.synthetic.main.item_poster.view.*
 
-class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
+class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view)
 
-    private val callback = object : DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+    private val callback = object : DiffUtil.ItemCallback<Series>() {
+        override fun areItemsTheSame(oldItem: Series, newItem: Series): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        override fun areContentsTheSame(oldItem: Series, newItem: Series): Boolean {
             return oldItem == newItem
         }
 
@@ -36,17 +37,13 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val movie = differ.currentList[position]
+        val series = differ.currentList[position]
 
         holder.itemView.apply {
-            Glide.with(this).load("$POSTER_BASE_URL${movie.poster_path}")
+            Glide.with(this).load("${Constants.POSTER_BASE_URL}${series.poster_path}")
                 .error(R.drawable.no_image_sample).into(img_poster)
             img_poster.clipToOutline = true
-            tv_name.text = movie.title
-
-            setOnClickListener {
-                onItemClickListener?.let { it(movie) }
-            }
+            tv_name.text = series.name
         }
     }
 
@@ -54,9 +51,9 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
         return differ.currentList.size
     }
 
-    private var onItemClickListener: ((Movie) -> Unit)? = null
+    private var onItemClickListener: ((Series) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Movie) -> Unit) {
+    fun setOnItemClickListener(listener: (Series) -> Unit) {
         onItemClickListener = listener
     }
 }

@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="popular_films">Popular Films</string>
     <string name="popular_series">Popular Series</string>
+    <string name="search">Search</string>
+    <string name="query">Query</string>
 </resources>

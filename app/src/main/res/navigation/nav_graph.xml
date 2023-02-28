@@ -32,5 +32,9 @@
         android:id="@+id/movieFragment"
         android:name="com.ckds.movieapp.screens.movie.MovieFragment"
         android:label="fragment_movie"
-        tools:layout="@layout/fragment_movie" />
+        tools:layout="@layout/fragment_movie" >
+        <argument
+            android:name="movie"
+            app:argType="com.ckds.movieapp.data.model.Movie" />
+    </fragment>
 </navigation>

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".screens.home.HomeFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,7 +20,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:text="@string/popular_films"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_movies"
@@ -36,12 +38,15 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:text="@string/popular_series"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_series"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                 app:spanCount="3"
                 tools:listitem="@layout/item_poster"
@@ -49,6 +54,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

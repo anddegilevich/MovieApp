@@ -5,9 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import com.ckds.movieapp.R
 import com.ckds.movieapp.databinding.FragmentHomeBinding
 import com.ckds.movieapp.screens.adapters.MoviesAdapter
+import com.ckds.movieapp.screens.adapters.SeriesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,6 +21,7 @@ class HomeFragment : Fragment() {
     private val mBinding get() = _binding!!
     private val viewModel by viewModels<HomeViewModel>()
     lateinit var adapterPopularMovies: MoviesAdapter
+    lateinit var adapterPopularSeries: SeriesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +35,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMoviesAdapter(view)
+        initSeriesAdapter(view)
     }
 
     private fun initMoviesAdapter(view: View) {
@@ -41,6 +47,24 @@ class HomeFragment : Fragment() {
 
         viewModel.popularMovies.observe(viewLifecycleOwner) { movies ->
             adapterPopularMovies.differ.submitList(movies)
+        }
+
+        adapterPopularMovies.setOnItemClickListener {
+            val bundle = bundleOf("movie" to it)
+            view.findNavController().navigate(R.id.action_homeFragment_to_movieFragment, bundle)
+        }
+
+    }
+
+    private fun initSeriesAdapter(view: View) {
+
+        adapterPopularSeries = SeriesAdapter()
+        mBinding.rvSeries.apply {
+            adapter = adapterPopularSeries
+        }
+
+        viewModel.popularSeries.observe(viewLifecycleOwner) { series ->
+            adapterPopularSeries.differ.submitList(series)
         }
 
     }
