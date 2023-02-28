@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".screens.home.HomeFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/popular_films"
+                android:padding="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_movies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                app:spanCount="3"
+                tools:listitem="@layout/item_poster"
+                tools:itemCount="9"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/popular_series"
+                android:padding="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_series"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                app:spanCount="3"
+                tools:listitem="@layout/item_poster"
+                tools:itemCount="9"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>
