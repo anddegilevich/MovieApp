@@ -12,7 +12,7 @@ import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.utils.Constants.Companion.POSTER_BASE_URL
 import kotlinx.android.synthetic.main.item_poster.view.*
 
-class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
+open class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view)
 
@@ -54,7 +54,7 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
         return differ.currentList.size
     }
 
-    private var onItemClickListener: ((Movie) -> Unit)? = null
+    internal var onItemClickListener: ((Movie) -> Unit)? = null
 
     fun setOnItemClickListener(listener: (Movie) -> Unit) {
         onItemClickListener = listener

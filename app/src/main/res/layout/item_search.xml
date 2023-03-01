@@ -14,6 +14,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:padding="6dp"
+        android:textColor="?attr/secondaryTextColor"
         />
 
 </LinearLayout>

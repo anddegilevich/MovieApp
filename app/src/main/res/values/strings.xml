@@ -8,4 +8,6 @@
     <string name="query">Query</string>
     <string name="description">Description</string>
     <string name="actors">Actors</string>
+    <string name="movies">Movies</string>
+    <string name="series">Series</string>
 </resources>

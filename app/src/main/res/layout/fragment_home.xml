@@ -21,7 +21,7 @@
                 android:textSize="20sp"
                 android:text="@string/popular_films"
                 android:padding="10dp"
-                android:textColor="@color/black"
+                android:textColor="?attr/mainTextColor"
                 android:textStyle="bold"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -39,7 +39,7 @@
                 android:textSize="20sp"
                 android:text="@string/popular_series"
                 android:padding="10dp"
-                android:textColor="@color/black"
+                android:textColor="?attr/mainTextColor"
                 android:textStyle="bold"/>
 
             <androidx.recyclerview.widget.RecyclerView

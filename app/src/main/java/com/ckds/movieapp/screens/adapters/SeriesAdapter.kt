@@ -12,7 +12,7 @@ import com.ckds.movieapp.data.model.series.Series
 import com.ckds.movieapp.utils.Constants
 import kotlinx.android.synthetic.main.item_poster.view.*
 
-class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
+open class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view)
 
@@ -54,7 +54,7 @@ class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
         return differ.currentList.size
     }
 
-    private var onItemClickListener: ((Series) -> Unit)? = null
+    internal var onItemClickListener: ((Series) -> Unit)? = null
 
     fun setOnItemClickListener(listener: (Series) -> Unit) {
         onItemClickListener = listener

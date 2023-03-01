@@ -24,18 +24,19 @@ class HomeViewModel @Inject constructor(private val repository: Repository): Vie
     private fun getPopularMovies() = viewModelScope.launch {
         val response = repository.getPopularMovies()
         if (response.isSuccessful) {
-            val movies = response.body()?.movies?.subList(0,9) ?: emptyList()
-            popularMovies.postValue(popularMovies.value?.plus(movies) ?: movies)
+            response.body()?.movies?.subList(0,9).let{ movies ->
+                popularMovies.postValue(movies)
+            }
         }
     }
 
     private fun getPopularSeries() = viewModelScope.launch {
         val response = repository.getPopularSeries()
         if (response.isSuccessful) {
-            val series = response.body()?.series?.subList(0,9) ?: emptyList()
-            popularSeries.postValue(popularSeries.value?.plus(series) ?: series)
+            response.body()?.series?.subList(0,9).let { series ->
+                popularSeries.postValue(series)
+            }
         }
     }
-
 
 }

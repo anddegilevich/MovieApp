@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".screens.search.SearchFragment"
     android:orientation="vertical">
 
@@ -12,7 +13,7 @@
         android:textSize="20sp"
         android:text="@string/search"
         android:padding="10dp"
-        android:textColor="@color/black"
+        android:textColor="?attr/mainTextColor"
         android:textStyle="bold"/>
 
     <EditText
@@ -20,13 +21,70 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/query"
-        android:textColor="@color/black"
+        android:textColor="?attr/mainTextColor"
         android:textSize="16sp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_search"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_results"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_search"/>
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/movies"
+            android:textSize="16sp"
+            android:padding="6dp"
+            android:textColor="?attr/mainTextColor"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_search_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_search"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_movies"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintHeight_max="200dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_series"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/series"
+            android:textSize="16sp"
+            android:padding="6dp"
+            android:textColor="?attr/mainTextColor"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_search_movies"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_search_series"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_search"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_series"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintHeight_max="200dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </LinearLayout>

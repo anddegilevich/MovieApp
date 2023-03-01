@@ -13,7 +13,7 @@
         tools:text="action"
         android:textSize="16sp"
         android:padding="6dp"
-        android:textColor="@color/dark_grey"
+        android:textColor="?attr/secondaryTextColor"
         android:textAlignment="center"/>
 
 </LinearLayout>
