@@ -1,4 +1,4 @@
-package com.ckds.movieapp.data.model
+package com.ckds.movieapp.data.model.series
 
 import com.google.gson.annotations.SerializedName
 

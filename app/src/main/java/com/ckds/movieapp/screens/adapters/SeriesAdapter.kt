@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ckds.movieapp.R
-import com.ckds.movieapp.data.model.Movie
-import com.ckds.movieapp.data.model.Series
+import com.ckds.movieapp.data.model.series.Series
 import com.ckds.movieapp.utils.Constants
 import kotlinx.android.synthetic.main.item_poster.view.*
 
@@ -44,6 +43,10 @@ class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
                 .error(R.drawable.no_image_sample).into(img_poster)
             img_poster.clipToOutline = true
             tv_name.text = series.name
+
+            setOnClickListener {
+                onItemClickListener?.let { it(series) }
+            }
         }
     }
 

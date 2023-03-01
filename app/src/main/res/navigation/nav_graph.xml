@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_movieFragment"
             app:destination="@id/movieFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_seriesFragment"
+            app:destination="@id/seriesFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -22,6 +25,9 @@
         <action
             android:id="@+id/action_searchFragment_to_movieFragment"
             app:destination="@id/movieFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_seriesFragment"
+            app:destination="@id/seriesFragment" />
     </fragment>
     <fragment
         android:id="@+id/userFragment"
@@ -35,6 +41,15 @@
         tools:layout="@layout/fragment_movie" >
         <argument
             android:name="movie"
-            app:argType="com.ckds.movieapp.data.model.Movie" />
+            app:argType="com.ckds.movieapp.data.model.movie.Movie" />
+    </fragment>
+    <fragment
+        android:id="@+id/seriesFragment"
+        android:name="com.ckds.movieapp.screens.series.SeriesFragment"
+        android:label="fragment_series"
+        tools:layout="@layout/fragment_series" >
+        <argument
+            android:name="series"
+            app:argType="com.ckds.movieapp.data.model.series.Series" />
     </fragment>
 </navigation>

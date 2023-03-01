@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg_round"
+    android:layout_margin="2dp">
+
+    <TextView
+        android:id="@+id/tv_genre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="action"
+        android:textSize="16sp"
+        android:padding="6dp"
+        android:textColor="@color/dark_grey"
+        android:textAlignment="center"/>
+
+</LinearLayout>

@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ckds.movieapp.data.Repository
-import com.ckds.movieapp.data.model.Movie
-import com.ckds.movieapp.data.model.Series
+import com.ckds.movieapp.data.model.movie.Movie
+import com.ckds.movieapp.data.model.series.Series
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +18,7 @@ class HomeViewModel @Inject constructor(private val repository: Repository): Vie
 
     init {
         getPopularMovies()
-//        getPopularSeries()
+        getPopularSeries()
     }
 
     private fun getPopularMovies() = viewModelScope.launch {

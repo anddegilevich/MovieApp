@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ckds.movieapp.R
-import com.ckds.movieapp.data.model.Movie
+import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.utils.Constants.Companion.POSTER_BASE_URL
 import kotlinx.android.synthetic.main.item_poster.view.*
 

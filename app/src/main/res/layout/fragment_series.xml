@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".screens.movie.MovieFragment">
+    tools:context=".screens.series.SeriesFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -45,20 +45,20 @@
                         android:textAlignment="center"/>
 
                     <TextView
-                        android:id="@+id/tv_year"
+                        android:id="@+id/tv_years"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="2003"
+                        tools:text="2003-2022"
                         android:textSize="16sp"
                         android:padding="6dp"
                         android:textColor="@color/dark_grey"
                         android:textAlignment="center"/>
 
                     <TextView
-                        android:id="@+id/tv_duration"
+                        android:id="@+id/tv_seasons"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="130 min"
+                        tools:text="3 seasons"
                         android:textSize="16sp"
                         android:padding="6dp"
                         android:textColor="@color/dark_grey"

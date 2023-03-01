@@ -67,5 +67,10 @@ class HomeFragment : Fragment() {
             adapterPopularSeries.differ.submitList(series)
         }
 
+        adapterPopularSeries.setOnItemClickListener {
+            val bundle = bundleOf("series" to it)
+            view.findNavController().navigate(R.id.action_homeFragment_to_seriesFragment, bundle)
+        }
+
     }
 }
