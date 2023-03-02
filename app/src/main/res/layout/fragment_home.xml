@@ -24,14 +24,36 @@
                 android:textColor="?attr/mainTextColor"
                 android:textStyle="bold"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_movies"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="3"
-                tools:listitem="@layout/item_poster"
-                tools:itemCount="9"/>
+                android:layout_height="550dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_movies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="3"
+                    tools:listitem="@layout/item_poster"
+                    tools:itemCount="9"/>
+
+                <TextView
+                    android:visibility="visible"
+                    android:id="@+id/tv_error_movies"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="16sp"
+                    android:padding="6dp"
+                    android:textColor="?attr/secondaryTextColor"
+                    android:gravity="center"/>
+
+                <ProgressBar
+                    android:visibility="invisible"
+                    android:id="@+id/progress_bar_movies"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -42,15 +64,35 @@
                 android:textColor="?attr/mainTextColor"
                 android:textStyle="bold"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_series"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="3"
-                tools:listitem="@layout/item_poster"
-                tools:itemCount="9"/>
+                android:layout_height="550dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_series"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="3"
+                    tools:listitem="@layout/item_poster"
+                    tools:itemCount="9"/>
+
+                <TextView
+                    android:visibility="visible"
+                    android:id="@+id/tv_error_series"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="16sp"
+                    android:padding="6dp"
+                    android:textColor="?attr/secondaryTextColor"
+                    android:gravity="center"/>
+
+                <ProgressBar
+                    android:visibility="invisible"
+                    android:id="@+id/progress_bar_series"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
 
         </LinearLayout>
 

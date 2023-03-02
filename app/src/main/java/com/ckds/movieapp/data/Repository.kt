@@ -1,41 +1,69 @@
 package com.ckds.movieapp.data
 
-import com.ckds.movieapp.data.api.Service
+import androidx.room.withTransaction
+import com.ckds.movieapp.data.api.AppApi
+import com.ckds.movieapp.data.db.AppDatabase
+import com.ckds.movieapp.data.db.entities.StoredMovies
+import com.ckds.movieapp.utils.networkBoundResource
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class Repository @Inject constructor(
-    private val service: Service
+    private val appApi: AppApi,
+    private val appDb: AppDatabase
 ) {
 
+    private val appDao = appDb.getDao()
+
     //Movie
-    suspend fun getPopularMovies(page: Int? = null) =
-        service.getPopularMovies(page = page)
+
+    fun getPopularMovies() = networkBoundResource(
+        query = {
+            appDao.getStoredMovies("popular")
+        },
+        fetch = {
+            delay(1000)
+            appApi.getPopularMovies()
+        },
+        saveFetchResult = { response ->
+            appDb.withTransaction {
+                appDao.deleteStoredMoviesIds("popular")
+                appDao.insertPopularMoviesId(response.movies.map {
+                    StoredMovies(id = it.id, category = "popular"
+                ) })
+                appDao.insertMovies(response.movies)
+                appDao.deleteUnusedMovies()
+            }
+        }
+    )
 
     suspend fun searchMovies(query: String, page: Int? = null) =
-        service.searchMovies(query = query, page = page)
+        appApi.searchMovies(query = query, page = page)
 
     suspend fun getMovieGenres() =
-        service.getMovieGenres()
+        appApi.getMovieGenres()
 
     suspend fun getMovieDetails(movieId: Int) =
-        service.getMovieDetails(movieId = movieId)
+        appApi.getMovieDetails(movieId = movieId)
 
     suspend fun getMovieCredits(movieId: Int) =
-        service.getMovieCredits(movieId = movieId)
+        appApi.getMovieCredits(movieId = movieId)
 
     //Series
     suspend fun getPopularSeries(page: Int? = null) =
-        service.getPopularSeries(page = page)
+        appApi.getPopularSeries(page = page)
 
     suspend fun searchSeries(query: String, page: Int? = null) =
-        service.searchSeries(query = query, page = page)
+        appApi.searchSeries(query = query, page = page)
 
     suspend fun getSeriesGenres() =
-        service.getSeriesGenres()
+        appApi.getSeriesGenres()
 
     suspend fun getSeriesDetails(tvId: Int) =
-        service.getSeriesDetails(tvId = tvId)
+        appApi.getSeriesDetails(tvId = tvId)
 
     suspend fun getSeriesCredits(tvId: Int) =
-        service.getSeriesCredits(tvId = tvId)
+        appApi.getSeriesCredits(tvId = tvId)
+
+
 }

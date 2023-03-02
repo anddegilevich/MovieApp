@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.ckds.movieapp.R
 import com.ckds.movieapp.databinding.FragmentHomeBinding
 import com.ckds.movieapp.screens.adapters.MoviesAdapter
 import com.ckds.movieapp.screens.adapters.SeriesAdapter
+import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,18 +42,25 @@ class HomeFragment : Fragment() {
 
     private fun initMoviesAdapter(view: View) {
 
-        adapterPopularMovies = MoviesAdapter()
-        mBinding.rvMovies.apply {
-            adapter = adapterPopularMovies
-        }
+        mBinding.apply {
+            adapterPopularMovies = MoviesAdapter()
+            rvMovies.apply {
+                adapter = adapterPopularMovies
+            }
 
-        viewModel.popularMovies.observe(viewLifecycleOwner) { movies ->
-            adapterPopularMovies.differ.submitList(movies)
-        }
+            viewModel.popularMovies.observe(viewLifecycleOwner) { resource ->
+                adapterPopularMovies.differ.submitList(resource.data)
+                progressBarMovies.isVisible = resource is Resource.Loading && resource.data.isNullOrEmpty()
+                tvErrorMovies.apply {
+                    isVisible = resource is Resource.Error && resource.data.isNullOrEmpty()
+                    text = resource.error.toString()
+                }
+            }
 
-        adapterPopularMovies.setOnItemClickListener {
-            val bundle = bundleOf("movie" to it)
-            view.findNavController().navigate(R.id.action_homeFragment_to_movieFragment, bundle)
+            adapterPopularMovies.setOnItemClickListener {
+                val bundle = bundleOf("movie" to it)
+                view.findNavController().navigate(R.id.action_homeFragment_to_movieFragment, bundle)
+            }
         }
 
     }

@@ -51,7 +51,16 @@ open class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        val limit = 9
+        differ.currentList.let { list ->
+            if(list.size > limit){
+                return limit;
+            }
+            else
+            {
+                return list.size;
+            }
+        }
     }
 
     internal var onItemClickListener: ((Movie) -> Unit)? = null
@@ -59,4 +68,5 @@ open class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
     fun setOnItemClickListener(listener: (Movie) -> Unit) {
         onItemClickListener = listener
     }
+
 }

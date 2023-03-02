@@ -1,12 +1,16 @@
 package com.ckds.movieapp.data.model.series
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.io.Serializable
 
+@Entity(tableName = "series")
 data class Series(
+    @PrimaryKey
+    val id: Int,
     val backdrop_path: String,
     val first_air_date: String,
     val genre_ids: List<Int>,
-    val id: Int,
     val name: String,
     val origin_country: List<String>,
     val original_language: String,

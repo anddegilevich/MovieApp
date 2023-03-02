@@ -12,7 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface Service {
+interface AppApi {
 
     //Movie
     @GET("/3/movie/popular")
@@ -22,7 +22,7 @@ interface Service {
         @Query("language") language: String? = null,
         @Query("region") region: String? = null,
         @Query("format") format: String = "json",
-    ) : Response<MovieResponse>
+    ) : MovieResponse
 
     @GET("/3/search/movie")
     suspend fun searchMovies(
