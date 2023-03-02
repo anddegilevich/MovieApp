@@ -53,12 +53,10 @@ open class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
     override fun getItemCount(): Int {
         val limit = 9
         differ.currentList.let { list ->
-            if(list.size > limit){
-                return limit;
-            }
-            else
-            {
-                return list.size;
+            return if (list.size > limit){
+                limit
+            } else {
+                list.size
             }
         }
     }

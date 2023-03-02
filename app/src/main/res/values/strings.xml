@@ -10,4 +10,7 @@
     <string name="actors">Actors</string>
     <string name="movies">Movies</string>
     <string name="series">Series</string>
+    <string name="unknown_host_exception">Unable to connect to the Internet</string>
+    <string name="connect_exception">Unable to connect to the moviedb.org</string>
+    <string name="socket_timeout_exception">Failed to connect to the moviedb.org</string>
 </resources>

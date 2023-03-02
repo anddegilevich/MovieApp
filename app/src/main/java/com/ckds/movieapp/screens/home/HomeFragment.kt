@@ -15,6 +15,9 @@ import com.ckds.movieapp.screens.adapters.MoviesAdapter
 import com.ckds.movieapp.screens.adapters.SeriesAdapter
 import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -53,7 +56,12 @@ class HomeFragment : Fragment() {
                 progressBarMovies.isVisible = resource is Resource.Loading && resource.data.isNullOrEmpty()
                 tvErrorMovies.apply {
                     isVisible = resource is Resource.Error && resource.data.isNullOrEmpty()
-                    text = resource.error.toString()
+                    text = when (resource.error) {
+                        is UnknownHostException -> getString(R.string.unknown_host_exception)
+                        is ConnectException -> getString(R.string.connect_exception)
+                        is SocketTimeoutException -> getString(R.string.socket_timeout_exception)
+                        else -> resource.error.toString()
+                    }
                 }
             }
 
@@ -67,19 +75,33 @@ class HomeFragment : Fragment() {
 
     private fun initSeriesAdapter(view: View) {
 
-        adapterPopularSeries = SeriesAdapter()
-        mBinding.rvSeries.apply {
-            adapter = adapterPopularSeries
-        }
+        mBinding.apply {
+            adapterPopularSeries = SeriesAdapter()
+            rvSeries.apply {
+                adapter = adapterPopularSeries
+            }
 
-        viewModel.popularSeries.observe(viewLifecycleOwner) { series ->
-            adapterPopularSeries.differ.submitList(series)
-        }
+            viewModel.popularSeries.observe(viewLifecycleOwner) { resource ->
+                adapterPopularSeries.differ.submitList(resource.data)
+                progressBarSeries.isVisible =
+                    resource is Resource.Loading && resource.data.isNullOrEmpty()
+                tvErrorSeries.apply {
+                    isVisible = resource is Resource.Error && resource.data.isNullOrEmpty()
+                    text = when (resource.error) {
+                        is UnknownHostException -> getString(R.string.unknown_host_exception)
+                        is ConnectException -> getString(R.string.connect_exception)
+                        is SocketTimeoutException -> getString(R.string.socket_timeout_exception)
+                        else -> resource.error.toString()
+                    }
+                }
+            }
 
-        adapterPopularSeries.setOnItemClickListener {
-            val bundle = bundleOf("series" to it)
-            view.findNavController().navigate(R.id.action_homeFragment_to_seriesFragment, bundle)
-        }
+            adapterPopularSeries.setOnItemClickListener {
+                val bundle = bundleOf("series" to it)
+                view.findNavController()
+                    .navigate(R.id.action_homeFragment_to_seriesFragment, bundle)
+            }
 
+        }
     }
 }

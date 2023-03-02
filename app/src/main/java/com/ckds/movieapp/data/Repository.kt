@@ -4,6 +4,7 @@ import androidx.room.withTransaction
 import com.ckds.movieapp.data.api.AppApi
 import com.ckds.movieapp.data.db.AppDatabase
 import com.ckds.movieapp.data.db.entities.StoredMovies
+import com.ckds.movieapp.data.db.entities.StoredSeries
 import com.ckds.movieapp.utils.networkBoundResource
 import kotlinx.coroutines.delay
 import javax.inject.Inject
@@ -23,41 +24,67 @@ class Repository @Inject constructor(
         },
         fetch = {
             delay(1000)
-            appApi.getPopularMovies()
+            appApi.getPopularMovies().movies
         },
-        saveFetchResult = { response ->
+        saveFetchResult = { movies ->
             appDb.withTransaction {
                 appDao.deleteStoredMoviesIds("popular")
-                appDao.insertPopularMoviesId(response.movies.map {
+                appDao.insertPopularMoviesId(movies.map {
                     StoredMovies(id = it.id, category = "popular"
                 ) })
-                appDao.insertMovies(response.movies)
+                appDao.insertMovies(movies)
                 appDao.deleteUnusedMovies()
             }
         }
     )
 
-    suspend fun searchMovies(query: String, page: Int? = null) =
-        appApi.searchMovies(query = query, page = page)
+    fun searchMovies(query: String, page: Int? = null) = networkBoundResource(
+        query = {
+            appDao.searchMovies(query = query)
+        },
+        fetch = {
+            delay(1000)
+            appApi.searchMovies(query = query, page = page).movies
+        },
+        saveFetchResult = {}
+    )
 
-    suspend fun getMovieGenres() =
-        appApi.getMovieGenres()
+    suspend fun getMovieDetails(movieId: Int) = appApi.getMovieDetails(movieId = movieId)
 
-    suspend fun getMovieDetails(movieId: Int) =
-        appApi.getMovieDetails(movieId = movieId)
-
-    suspend fun getMovieCredits(movieId: Int) =
-        appApi.getMovieCredits(movieId = movieId)
+    suspend fun getMovieCredits(movieId: Int) = appApi.getMovieCredits(movieId = movieId)
 
     //Series
-    suspend fun getPopularSeries(page: Int? = null) =
-        appApi.getPopularSeries(page = page)
 
-    suspend fun searchSeries(query: String, page: Int? = null) =
-        appApi.searchSeries(query = query, page = page)
+    fun getPopularSeries() = networkBoundResource(
+        query = {
+            appDao.getStoredSeries("popular")
+        },
+        fetch = {
+            delay(1000)
+            appApi.getPopularSeries().series
+        },
+        saveFetchResult = { series ->
+            appDb.withTransaction {
+                appDao.deleteStoredSeriesIds("popular")
+                appDao.insertPopularSeriesId(series.map {
+                    StoredSeries(id = it.id, category = "popular"
+                    ) })
+                appDao.insertSeries(series)
+                appDao.deleteUnusedSeries()
+            }
+        }
+    )
 
-    suspend fun getSeriesGenres() =
-        appApi.getSeriesGenres()
+    fun searchSeries(query: String, page: Int? = null) = networkBoundResource(
+        query = {
+            appDao.searchSeries(query = query)
+        },
+        fetch = {
+            delay(1000)
+            appApi.searchSeries(query = query, page = page).series
+        },
+        saveFetchResult = {}
+        )
 
     suspend fun getSeriesDetails(tvId: Int) =
         appApi.getSeriesDetails(tvId = tvId)

@@ -10,16 +10,21 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.ckds.movieapp.R
 import com.ckds.movieapp.databinding.FragmentSearchBinding
 import com.ckds.movieapp.screens.adapters.SearchMoviesAdapter
 import com.ckds.movieapp.screens.adapters.SearchSeriesAdapter
+import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -63,36 +68,60 @@ class SearchFragment : Fragment() {
 
     private fun initMoviesAdapter(view: View) {
 
-        adapterSearchMovies = SearchMoviesAdapter()
-        mBinding.rvSearchMovies.apply {
-            adapter = adapterSearchMovies
-        }
+        mBinding.apply {
+            adapterSearchMovies = SearchMoviesAdapter()
+            rvSearchMovies.apply {
+                adapter = adapterSearchMovies
+            }
 
-        viewModel.searchedMovies.observe(viewLifecycleOwner) { movies ->
-            adapterSearchMovies.differ.submitList(movies)
-        }
+            viewModel.searchedMovies.observe(viewLifecycleOwner) { resource ->
+                adapterSearchMovies.differ.submitList(resource.data)
+            progressBarMovies.isVisible = resource is Resource.Loading && resource.data.isNullOrEmpty()
+                tvErrorMovies.apply {
+                    isVisible = resource is Resource.Error && resource.data.isNullOrEmpty()
+                    text = when (resource.error) {
+                        is UnknownHostException -> getString(R.string.unknown_host_exception)
+                        is ConnectException -> getString(R.string.connect_exception)
+                        is SocketTimeoutException -> getString(R.string.socket_timeout_exception)
+                        else -> resource.error.toString()
+                    }
+                }
+            }
 
-        adapterSearchMovies.setOnItemClickListener {
-            val bundle = bundleOf("movie" to it)
-            view.findNavController().navigate(R.id.action_searchFragment_to_movieFragment, bundle)
+            adapterSearchMovies.setOnItemClickListener {
+                val bundle = bundleOf("movie" to it)
+                view.findNavController().navigate(R.id.action_searchFragment_to_movieFragment, bundle)
+            }
         }
 
     }
 
     private fun initSeriesAdapter(view: View) {
 
-        adapterSearchSeries = SearchSeriesAdapter()
-        mBinding.rvSearchSeries.apply {
-            adapter = adapterSearchSeries
-        }
+        mBinding.apply {
+            adapterSearchSeries = SearchSeriesAdapter()
+            rvSearchSeries.apply {
+                adapter = adapterSearchSeries
+            }
 
-        viewModel.searchedSeries.observe(viewLifecycleOwner) { series ->
-            adapterSearchSeries.differ.submitList(series)
-        }
+            viewModel.searchedSeries.observe(viewLifecycleOwner) { resource ->
+                adapterSearchSeries.differ.submitList(resource.data)
+                progressBarSeries.isVisible = resource is Resource.Loading && resource.data.isNullOrEmpty()
+                tvErrorSeries.apply {
+                    isVisible = resource is Resource.Error && resource.data.isNullOrEmpty()
+                    text = when (resource.error) {
+                        is UnknownHostException -> getString(R.string.unknown_host_exception)
+                        is ConnectException -> getString(R.string.connect_exception)
+                        is SocketTimeoutException -> getString(R.string.socket_timeout_exception)
+                        else -> resource.error.toString()
+                    }
+                }
+            }
 
-        adapterSearchSeries.setOnItemClickListener {
-            val bundle = bundleOf("series" to it)
-            view.findNavController().navigate(R.id.action_searchFragment_to_seriesFragment, bundle)
+            adapterSearchSeries.setOnItemClickListener {
+                val bundle = bundleOf("series" to it)
+                view.findNavController().navigate(R.id.action_searchFragment_to_seriesFragment, bundle)
+            }
         }
 
     }

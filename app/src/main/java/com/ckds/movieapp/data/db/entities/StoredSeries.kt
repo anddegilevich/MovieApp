@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "stored_series")
 data class StoredSeries(
     @PrimaryKey
-    val id: Int,
-    val category: String
+    val id: Int?,
+    val category: String?
 )

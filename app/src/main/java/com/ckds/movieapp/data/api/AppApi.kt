@@ -15,6 +15,7 @@ import retrofit2.http.Query
 interface AppApi {
 
     //Movie
+
     @GET("/3/movie/popular")
     suspend fun getPopularMovies(
         @Query("api_key") apiKey: String = API_KEY,
@@ -35,14 +36,7 @@ interface AppApi {
         @Query("year") year: Int? = null,
         @Query("primary_release_year") primaryReleaseYear: Int? = null,
         @Query("format") format: String = "json",
-    ) : Response<MovieResponse>
-
-    @GET("/3/genre/movie/list")
-    suspend fun getMovieGenres(
-        @Query("api_key") apiKey: String = API_KEY,
-        @Query("language") language: String? = null,
-        @Query("format") format: String = "json",
-    ) : Response<GenreResponse>
+    ) : MovieResponse
 
     @GET("/3/movie/{movie_id}")
     suspend fun getMovieDetails(
@@ -51,7 +45,7 @@ interface AppApi {
         @Query("language") language: String? = null,
         @Query("append_to_response") appendToResponse: String? = null,
         @Query("format") format: String = "json",
-    ) : Response<MovieDetailsResponse>
+    ) : MovieDetailsResponse
 
     @GET("/3/movie/{movie_id}/credits")
     suspend fun getMovieCredits(
@@ -59,16 +53,17 @@ interface AppApi {
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String? = null,
         @Query("format") format: String = "json",
-    ) : Response<CreditsResponse>
+    ) : CreditsResponse
 
     //Series
+
     @GET("/3/tv/popular")
     suspend fun getPopularSeries(
         @Query("api_key") apiKey: String = API_KEY,
         @Query("page") page: Int? = null,
         @Query("language") language: String? = null,
         @Query("format") format: String = "json",
-    ) : Response<SeriesResponse>
+    ) : SeriesResponse
 
     @GET("/3/search/tv")
     suspend fun searchSeries(
@@ -79,14 +74,7 @@ interface AppApi {
         @Query("include_adult") includeAdult: Boolean? = null,
         @Query("first_air_date_year") firstAirDateYear: Int? = null,
         @Query("format") format: String = "json",
-    ) : Response<SeriesResponse>
-
-    @GET("/3/genre/tv/list")
-    suspend fun getSeriesGenres(
-        @Query("api_key") apiKey: String = API_KEY,
-        @Query("language") language: String? = null,
-        @Query("format") format: String = "json",
-    ) : Response<GenreResponse>
+    ) : SeriesResponse
 
     @GET("/3/tv/{tv_id}")
     suspend fun getSeriesDetails(

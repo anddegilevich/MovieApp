@@ -38,7 +38,7 @@
                     tools:itemCount="9"/>
 
                 <TextView
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     android:id="@+id/tv_error_movies"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -51,7 +51,9 @@
                     android:visibility="invisible"
                     android:id="@+id/progress_bar_movies"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"/>
             </FrameLayout>
 
 
@@ -91,7 +93,9 @@
                     android:visibility="invisible"
                     android:id="@+id/progress_bar_series"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"/>
             </FrameLayout>
 
         </LinearLayout>

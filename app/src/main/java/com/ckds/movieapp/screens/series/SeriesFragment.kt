@@ -45,7 +45,7 @@ class SeriesFragment : Fragment() {
                 imgPoster.clipToOutline = true
             }
             series.id.let { tvId ->
-                initDetails(tvId = tvId)
+                initDetails(tvId = tvId!!)
                 initCastAdapter(tvId = tvId)
             }
 

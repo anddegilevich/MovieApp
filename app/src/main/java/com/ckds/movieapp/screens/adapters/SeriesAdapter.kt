@@ -51,7 +51,14 @@ open class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        val limit = 9
+        differ.currentList.let { list ->
+            return if(list.size > limit){
+                limit
+            } else {
+                list.size
+            }
+        }
     }
 
     internal var onItemClickListener: ((Series) -> Unit)? = null

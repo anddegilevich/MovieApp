@@ -42,7 +42,7 @@ class MovieFragment : Fragment() {
             mBinding.apply {
                 tvTitle.text = movie.title
                 movie.release_date.let { date ->
-                    tvYear.text = date.subSequence(0,4)
+                    tvYear.text = date?.subSequence(0,4)
                 }
                 tvDescription.text = movie.overview
                 Glide.with(view).load("${Constants.POSTER_BASE_URL}${movie.poster_path}")
@@ -50,7 +50,7 @@ class MovieFragment : Fragment() {
                 imgPoster.clipToOutline = true
             }
             movie.id.let { movieId ->
-                initDetails(movieId = movieId)
+                initDetails(movieId = movieId!!)
                 initCastAdapter(movieId = movieId)
             }
 
@@ -58,13 +58,13 @@ class MovieFragment : Fragment() {
     }
 
     private fun initCastAdapter(movieId: Int) {
-        viewModel.getCast(movieId = movieId)
+        viewModel.getCredits(movieId = movieId)
         adapterCast = ActorsAdapter()
         mBinding.rvActors.apply {
             adapter = adapterCast
         }
-        viewModel.castLiveData.observe(viewLifecycleOwner) { cast ->
-            adapterCast.differ.submitList(cast)
+        viewModel.creditsLiveData.observe(viewLifecycleOwner) { resource ->
+            adapterCast.differ.submitList(resource.data?.cast)
         }
     }
 
@@ -74,11 +74,13 @@ class MovieFragment : Fragment() {
         mBinding.rvGenre.apply {
             adapter = adapterGenres
         }
-        viewModel.detailsLiveData.observe(viewLifecycleOwner) { details ->
-            details.runtime.toString().let{ runtime ->
-                mBinding.tvDuration.text = "$runtime min"
+        viewModel.detailsLiveData.observe(viewLifecycleOwner) { resource ->
+            resource.data?.apply {
+                runtime.toString().let{ runtime ->
+                    mBinding.tvDuration.text = "$runtime min"
+                }
+                adapterGenres.differ.submitList(genres)
             }
-            adapterGenres.differ.submitList(details.genres)
         }
     }
 }
