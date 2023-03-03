@@ -2,7 +2,7 @@ package com.ckds.movieapp.data.db
 
 import androidx.room.*
 import androidx.room.Dao
-import com.ckds.movieapp.data.db.entities.StoredMovies
+import com.ckds.movieapp.data.db.entities.StoredMovie
 import com.ckds.movieapp.data.db.entities.StoredSeries
 import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.data.model.series.Series
@@ -14,10 +14,19 @@ interface AppDao {
     //MoviesId
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPopularMoviesId(moviesId: List<StoredMovies>)
+    suspend fun insertMoviesId(moviesId: List<StoredMovie>)
 
     @Query("DELETE FROM stored_movies WHERE category = :category")
     fun deleteStoredMoviesIds(category: String)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addMovieToFavorite(movie: StoredMovie)
+
+    @Query("DELETE FROM stored_movies WHERE category = 'favorite' AND id = :movieId")
+    suspend fun deleteMovieFromFavorite(movieId: Int)
+
+    @Query("SELECT EXISTS(SELECT * FROM stored_movies WHERE category = 'favorite' AND id = :movieId)")
+    suspend fun checkIfMovieIsFavorite(movieId: Int) : Boolean
 
     //Movies
 
@@ -28,7 +37,7 @@ interface AppDao {
     suspend fun insertMovies(movies: List<Movie>)
 
     @Query("DELETE FROM movies WHERE id NOT IN (SELECT DISTINCT id FROM stored_movies)")
-    fun deleteUnusedMovies()
+    suspend fun deleteUnusedMovies()
 
     @Query("SELECT * FROM movies WHERE title LIKE '%' || :query || '%'")
     suspend fun searchMovies(query: String) : List<Movie>
@@ -41,6 +50,15 @@ interface AppDao {
     @Query("DELETE FROM stored_series WHERE category = :category")
     fun deleteStoredSeriesIds(category: String)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addSeriesToFavorite(series: StoredSeries)
+
+    @Query("DELETE FROM stored_series WHERE category = 'favorite' AND id = :tvId")
+    suspend fun deleteSeriesFromFavorite(tvId: Int)
+
+    @Query("SELECT EXISTS(SELECT * FROM stored_series WHERE category = 'favorite' AND id = :tvId)")
+    suspend fun checkIfSeriesIsFavorite(tvId: Int) : Boolean
+
     //Series
 
     @Query("""SELECT * FROM series WHERE id IN (SELECT id FROM stored_series WHERE category = :category) ORDER BY popularity DESC""")
@@ -50,7 +68,7 @@ interface AppDao {
     suspend fun insertSeries(series: List<Series>)
 
     @Query("DELETE FROM movies WHERE id NOT IN (SELECT DISTINCT id FROM stored_movies)")
-    fun deleteUnusedSeries()
+    suspend fun deleteUnusedSeries()
 
     @Query("SELECT * FROM series WHERE name LIKE '%' || :query || '%'")
     suspend fun searchSeries(query: String) : List<Series>

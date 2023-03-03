@@ -11,8 +11,11 @@ import com.ckds.movieapp.R
 import com.ckds.movieapp.data.model.series.Series
 import com.ckds.movieapp.utils.Constants
 import kotlinx.android.synthetic.main.item_poster.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
-open class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
+open class SeriesAdapter(open val viewModel: AdapterViewModel): RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view)
 
@@ -46,6 +49,18 @@ open class SeriesAdapter: RecyclerView.Adapter<SeriesAdapter.ViewHolder>() {
 
             setOnClickListener {
                 onItemClickListener?.let { it(series) }
+            }
+
+            MainScope().launch {
+                val favorite = MainScope().async {viewModel.checkIfSeriesIsFavorite(series.id!!)}
+                checkbox_favorite.isChecked = favorite.await()
+            }
+            checkbox_favorite.setOnCheckedChangeListener{ _, isChecked ->
+                if (isChecked) {
+                    viewModel.addSeriesToFavourite(series = series)
+                } else {
+                    viewModel.deleteSeriesFromFavourite(tvId = series.id!!)
+                }
             }
         }
     }

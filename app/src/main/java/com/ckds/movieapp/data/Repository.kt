@@ -3,7 +3,7 @@ package com.ckds.movieapp.data
 import androidx.room.withTransaction
 import com.ckds.movieapp.data.api.AppApi
 import com.ckds.movieapp.data.db.AppDatabase
-import com.ckds.movieapp.data.db.entities.StoredMovies
+import com.ckds.movieapp.data.db.entities.StoredMovie
 import com.ckds.movieapp.data.db.entities.StoredSeries
 import com.ckds.movieapp.data.model.auth.AuthRequest
 import com.ckds.movieapp.data.model.auth.SessionResponse
@@ -33,10 +33,10 @@ class Repository @Inject constructor(
         saveFetchResult = { movies ->
             appDb.withTransaction {
                 appDao.deleteStoredMoviesIds("popular")
-                appDao.insertPopularMoviesId(movies.map {
-                    StoredMovies(id = it.id, category = "popular"
+                appDao.insertMoviesId(moviesId = movies.map {
+                    StoredMovie(id = it.id!!, category = "popular"
                 ) })
-                appDao.insertMovies(movies)
+                appDao.insertMovies(movies = movies)
                 appDao.deleteUnusedMovies()
             }
         }
@@ -54,6 +54,19 @@ class Repository @Inject constructor(
 
     suspend fun getMovieCredits(movieId: Int) = appApi.getMovieCredits(movieId = movieId)
 
+    suspend fun addMovieToFavourite(movie: Movie) {
+        appDao.addMovieToFavorite(movie = StoredMovie(id = movie.id!!, category = "favorite"))
+        appDao.insertMovies(movies = listOf(movie))
+    }
+
+    suspend fun deleteMovieFromFavourite(movieId: Int) {
+        appDao.deleteMovieFromFavorite(movieId = movieId)
+        appDao.deleteUnusedMovies()
+    }
+
+    suspend fun checkIfMovieIsFavorite(movieId: Int) =
+        appDao.checkIfMovieIsFavorite(movieId = movieId)
+
     // Series
 
     fun getPopularSeries() = networkBoundResource(
@@ -68,7 +81,7 @@ class Repository @Inject constructor(
             appDb.withTransaction {
                 appDao.deleteStoredSeriesIds("popular")
                 appDao.insertPopularSeriesId(series.map {
-                    StoredSeries(id = it.id, category = "popular"
+                    StoredSeries(id = it.id!!, category = "popular"
                     ) })
                 appDao.insertSeries(series)
                 appDao.deleteUnusedSeries()
@@ -89,6 +102,19 @@ class Repository @Inject constructor(
 
     suspend fun getSeriesCredits(tvId: Int) =
         appApi.getSeriesCredits(tvId = tvId)
+
+    suspend fun addSeriesToFavourite(series: Series) {
+        appDao.addSeriesToFavorite(series = StoredSeries(id = series.id!!, category = "favorite"))
+        appDao.insertSeries(series = listOf(series))
+    }
+
+    suspend fun deleteSeriesFromFavourite(tvId: Int) {
+        appDao.deleteSeriesFromFavorite(tvId = tvId)
+        appDao.deleteUnusedSeries()
+    }
+
+    suspend fun checkIfSeriesIsFavorite(tvId: Int) =
+        appDao.checkIfSeriesIsFavorite(tvId = tvId)
 
     // Auth
 

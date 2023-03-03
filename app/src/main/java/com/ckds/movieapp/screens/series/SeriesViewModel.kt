@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.ckds.movieapp.data.Repository
 import com.ckds.movieapp.data.model.credits.CreditsResponse
 import com.ckds.movieapp.data.model.details.series.SeriesDetailsResponse
+import com.ckds.movieapp.data.model.series.Series
 import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -40,5 +41,20 @@ class SeriesViewModel @Inject constructor(private val repository: Repository): V
             }
         }
     }
+
+    fun addSeriesToFavourite(series: Series) {
+        viewModelScope.launch {
+            repository.addSeriesToFavourite(series = series)
+        }
+    }
+
+    fun deleteSeriesFromFavourite(tvId: Int) {
+        viewModelScope.launch {
+            repository.deleteSeriesFromFavourite(tvId = tvId)
+        }
+    }
+
+    suspend fun checkIfSeriesIsFavorite(tvId: Int) =
+        repository.checkIfSeriesIsFavorite(tvId = tvId)
 
 }

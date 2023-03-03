@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.ckds.movieapp.R
 import com.ckds.movieapp.databinding.FragmentSearchBinding
+import com.ckds.movieapp.screens.adapters.AdapterViewModel
 import com.ckds.movieapp.screens.adapters.SearchMoviesAdapter
 import com.ckds.movieapp.screens.adapters.SearchSeriesAdapter
 import com.ckds.movieapp.utils.Resource
@@ -32,6 +33,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val mBinding get() = _binding!!
     private val viewModel by viewModels<SearchViewModel>()
+    private val adapterViewModel by viewModels<AdapterViewModel>()
     lateinit var adapterSearchMovies: SearchMoviesAdapter
     lateinit var adapterSearchSeries: SearchSeriesAdapter
 
@@ -69,7 +71,7 @@ class SearchFragment : Fragment() {
     private fun initMoviesAdapter(view: View) {
 
         mBinding.apply {
-            adapterSearchMovies = SearchMoviesAdapter()
+            adapterSearchMovies = SearchMoviesAdapter(adapterViewModel)
             rvSearchMovies.apply {
                 adapter = adapterSearchMovies
             }
@@ -90,7 +92,7 @@ class SearchFragment : Fragment() {
     private fun initSeriesAdapter(view: View) {
 
         mBinding.apply {
-            adapterSearchSeries = SearchSeriesAdapter()
+            adapterSearchSeries = SearchSeriesAdapter(adapterViewModel)
             rvSearchSeries.apply {
                 adapter = adapterSearchSeries
             }

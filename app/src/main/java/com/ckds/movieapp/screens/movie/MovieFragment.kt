@@ -17,6 +17,9 @@ import com.ckds.movieapp.utils.Constants
 import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.item_poster.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -47,18 +50,29 @@ class MovieFragment : Fragment() {
             mBinding.apply {
                 tvTitle.text = movie.title
                 movie.release_date.let { date ->
-                    tvYear.text = date?.subSequence(0,4)
+                    tvYear.text = date?.subSequence(0, 4)
                 }
                 tvDescription.text = movie.overview
                 Glide.with(view).load("${Constants.POSTER_BASE_URL}${movie.poster_path}")
                     .error(R.drawable.no_image_sample).into(imgPoster)
                 imgPoster.clipToOutline = true
-            }
-            movie.id.let { movieId ->
-                initDetails(movieId = movieId!!)
-                initCastAdapter(movieId = movieId)
-            }
 
+                movie.id.let { movieId ->
+                    initDetails(movieId = movieId!!)
+                    initCastAdapter(movieId = movieId)
+                    MainScope().launch {
+                        val favorite = MainScope().async {viewModel.checkIfMovieIsFavorite(movieId = movieId)}
+                        checkboxFavorite.isChecked = favorite.await()
+                    }
+                    checkboxFavorite.setOnCheckedChangeListener { _, isChecked ->
+                        if (isChecked) {
+                            viewModel.addMovieToFavourite(movie = movie)
+                        } else {
+                            viewModel.deleteMovieFromFavourite(movieId = movieId)
+                        }
+                    }
+                }
+            }
         }
     }
 

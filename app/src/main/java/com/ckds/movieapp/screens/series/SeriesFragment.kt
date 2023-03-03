@@ -16,6 +16,10 @@ import com.ckds.movieapp.screens.adapters.GenresAdapter
 import com.ckds.movieapp.utils.Constants
 import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.item_poster.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -48,10 +52,22 @@ class SeriesFragment : Fragment() {
                 Glide.with(view).load("${Constants.POSTER_BASE_URL}${series.poster_path}")
                     .error(R.drawable.no_image_sample).into(imgPoster)
                 imgPoster.clipToOutline = true
-            }
-            series.id.let { tvId ->
-                initDetails(tvId = tvId!!)
-                initCastAdapter(tvId = tvId)
+
+                series.id.let { tvId ->
+                    initDetails(tvId = tvId!!)
+                    initCastAdapter(tvId = tvId)
+                    MainScope().launch {
+                        val favorite = MainScope().async {viewModel.checkIfSeriesIsFavorite(tvId = tvId)}
+                        checkboxFavorite.isChecked = favorite.await()
+                    }
+                    checkboxFavorite.setOnCheckedChangeListener{ _, isChecked ->
+                        if (isChecked) {
+                            viewModel.addSeriesToFavourite(series = series)
+                        } else {
+                            viewModel.deleteSeriesFromFavourite(tvId = series.id!!)
+                        }
+                    }
+                }
             }
         }
     }

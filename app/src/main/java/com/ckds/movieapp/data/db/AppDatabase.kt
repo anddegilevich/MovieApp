@@ -4,13 +4,13 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.ckds.movieapp.data.db.converters.Converters
-import com.ckds.movieapp.data.db.entities.StoredMovies
+import com.ckds.movieapp.data.db.entities.StoredMovie
 import com.ckds.movieapp.data.db.entities.StoredSeries
 import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.data.model.series.Series
 
 @Database(entities = [
-    StoredMovies::class,
+    StoredMovie::class,
     Movie::class,
     StoredSeries::class,
     Series::class],

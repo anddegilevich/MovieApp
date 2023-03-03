@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.ckds.movieapp.R
 import com.ckds.movieapp.databinding.FragmentHomeBinding
+import com.ckds.movieapp.screens.adapters.AdapterViewModel
 import com.ckds.movieapp.screens.adapters.MoviesAdapter
 import com.ckds.movieapp.screens.adapters.SeriesAdapter
 import com.ckds.movieapp.utils.Resource
@@ -25,6 +26,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val mBinding get() = _binding!!
     private val viewModel by viewModels<HomeViewModel>()
+    private val adapterViewModel by viewModels<AdapterViewModel>()
     lateinit var adapterPopularMovies: MoviesAdapter
     lateinit var adapterPopularSeries: SeriesAdapter
 
@@ -46,7 +48,7 @@ class HomeFragment : Fragment() {
     private fun initMoviesAdapter(view: View) {
 
         mBinding.apply {
-            adapterPopularMovies = MoviesAdapter()
+            adapterPopularMovies = MoviesAdapter(adapterViewModel)
             rvMovies.apply {
                 adapter = adapterPopularMovies
             }
@@ -76,7 +78,7 @@ class HomeFragment : Fragment() {
     private fun initSeriesAdapter(view: View) {
 
         mBinding.apply {
-            adapterPopularSeries = SeriesAdapter()
+            adapterPopularSeries = SeriesAdapter(adapterViewModel)
             rvSeries.apply {
                 adapter = adapterPopularSeries
             }
