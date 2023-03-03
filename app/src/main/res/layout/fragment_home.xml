@@ -35,7 +35,8 @@
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="3"
                     tools:listitem="@layout/item_poster"
-                    tools:itemCount="9"/>
+                    tools:itemCount="9"
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:visibility="invisible"
@@ -77,7 +78,8 @@
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="3"
                     tools:listitem="@layout/item_poster"
-                    tools:itemCount="9"/>
+                    tools:itemCount="9"
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:visibility="visible"

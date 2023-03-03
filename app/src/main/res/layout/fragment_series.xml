@@ -75,6 +75,14 @@
                         tools:itemCount="3"
                         />
 
+                    <CheckBox
+                        android:layout_gravity="center"
+                        android:id="@+id/checkbox_favorite"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:padding="4dp"
+                        android:button="@drawable/select_like"/>
+
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
             </LinearLayout>

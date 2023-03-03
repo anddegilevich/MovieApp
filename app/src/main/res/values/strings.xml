@@ -13,4 +13,9 @@
     <string name="unknown_host_exception">Unable to connect to the Internet</string>
     <string name="connect_exception">Unable to connect to the moviedb.org</string>
     <string name="socket_timeout_exception">Failed to connect to the moviedb.org</string>
+    <string name="login">Login</string>
+    <string name="authorization">Authorization</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="favorite">Favorite</string>
 </resources>

@@ -5,12 +5,14 @@ import com.ckds.movieapp.data.api.AppApi
 import com.ckds.movieapp.data.db.AppDatabase
 import com.ckds.movieapp.data.db.entities.StoredMovies
 import com.ckds.movieapp.data.db.entities.StoredSeries
+import com.ckds.movieapp.data.model.auth.AuthRequest
+import com.ckds.movieapp.data.model.auth.SessionResponse
 import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.data.model.series.Series
+import com.ckds.movieapp.utils.Resource
 import com.ckds.movieapp.utils.networkBoundResource
 import kotlinx.coroutines.delay
 import javax.inject.Inject
-
 class Repository @Inject constructor(
     private val appApi: AppApi,
     private val appDb: AppDatabase
@@ -18,7 +20,7 @@ class Repository @Inject constructor(
 
     private val appDao = appDb.getDao()
 
-    //Movie
+    // Movie
 
     fun getPopularMovies() = networkBoundResource(
         query = {
@@ -52,7 +54,7 @@ class Repository @Inject constructor(
 
     suspend fun getMovieCredits(movieId: Int) = appApi.getMovieCredits(movieId = movieId)
 
-    //Series
+    // Series
 
     fun getPopularSeries() = networkBoundResource(
         query = {
@@ -88,5 +90,27 @@ class Repository @Inject constructor(
     suspend fun getSeriesCredits(tvId: Int) =
         appApi.getSeriesCredits(tvId = tvId)
 
+    // Auth
+
+    suspend fun authenticate(login: String, password: String): Resource<SessionResponse> {
+        try {
+            appApi.getAuthenticationToken().let { token ->
+                appApi.authenticateToken(authRequest = AuthRequest(
+                    username = login,
+                    password = password,
+                    request_token = token.request_token)
+                ).let { authToken ->
+                    return Resource.Success(data = appApi.createSession(requestToken = authToken))
+                }
+            }
+        } catch (throwable: Throwable) {
+            return Resource.Error(throwable = throwable)
+        }
+    }
+
+    suspend fun logOut(session: SessionResponse) {
+        appApi.deleteSession(sessionID = session)
+    }
 
 }
+

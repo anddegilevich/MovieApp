@@ -17,12 +17,19 @@
         android:textStyle="bold"/>
 
     <EditText
+        android:padding="6dp"
         android:id="@+id/edit_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/query"
         android:textColor="?attr/mainTextColor"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:inputType="textShortMessage"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/purple"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_results"

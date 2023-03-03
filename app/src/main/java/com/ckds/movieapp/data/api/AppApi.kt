@@ -1,16 +1,16 @@
 package com.ckds.movieapp.data.api
 
+import com.ckds.movieapp.data.model.auth.AuthRequest
+import com.ckds.movieapp.data.model.auth.SessionResponse
 import com.ckds.movieapp.data.model.credits.CreditsResponse
 import com.ckds.movieapp.data.model.details.movie.MovieDetailsResponse
 import com.ckds.movieapp.data.model.details.series.SeriesDetailsResponse
-import com.ckds.movieapp.data.model.genre.GenreResponse
 import com.ckds.movieapp.data.model.movie.MovieResponse
 import com.ckds.movieapp.data.model.series.SeriesResponse
+import com.ckds.movieapp.data.model.auth.TokenResponse
+import com.ckds.movieapp.data.model.user.FavoriteRequest
 import com.ckds.movieapp.utils.Constants.Companion.API_KEY
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface AppApi {
 
@@ -22,7 +22,6 @@ interface AppApi {
         @Query("page") page: Int? = null,
         @Query("language") language: String? = null,
         @Query("region") region: String? = null,
-        @Query("format") format: String = "json",
     ) : MovieResponse
 
     @GET("/3/search/movie")
@@ -35,7 +34,6 @@ interface AppApi {
         @Query("region") region: String? = null,
         @Query("year") year: Int? = null,
         @Query("primary_release_year") primaryReleaseYear: Int? = null,
-        @Query("format") format: String = "json",
     ) : MovieResponse
 
     @GET("/3/movie/{movie_id}")
@@ -44,7 +42,6 @@ interface AppApi {
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String? = null,
         @Query("append_to_response") appendToResponse: String? = null,
-        @Query("format") format: String = "json",
     ) : MovieDetailsResponse
 
     @GET("/3/movie/{movie_id}/credits")
@@ -52,7 +49,6 @@ interface AppApi {
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String? = null,
-        @Query("format") format: String = "json",
     ) : CreditsResponse
 
     //Series
@@ -62,7 +58,6 @@ interface AppApi {
         @Query("api_key") apiKey: String = API_KEY,
         @Query("page") page: Int? = null,
         @Query("language") language: String? = null,
-        @Query("format") format: String = "json",
     ) : SeriesResponse
 
     @GET("/3/search/tv")
@@ -73,7 +68,6 @@ interface AppApi {
         @Query("query") query: String,
         @Query("include_adult") includeAdult: Boolean? = null,
         @Query("first_air_date_year") firstAirDateYear: Int? = null,
-        @Query("format") format: String = "json",
     ) : SeriesResponse
 
     @GET("/3/tv/{tv_id}")
@@ -82,7 +76,6 @@ interface AppApi {
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String? = null,
         @Query("append_to_response") appendToResponse: String? = null,
-        @Query("format") format: String = "json",
     ) : SeriesDetailsResponse
 
     @GET("/3/tv/{tv_id}/credits")
@@ -90,7 +83,68 @@ interface AppApi {
         @Path("tv_id") tvId: Int,
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String? = null,
-        @Query("format") format: String = "json",
     ) : CreditsResponse
+
+    // Auth
+
+    @GET("/3/authentication/token/new")
+    suspend fun getAuthenticationToken(
+        @Query("api_key") apiKey: String = API_KEY,
+    ) : TokenResponse
+
+    @POST("/3/authentication/token/validate_with_login")
+    suspend fun authenticateToken(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Body authRequest: AuthRequest,
+    ) : TokenResponse
+
+    @POST("/3/authentication/session/new")
+    suspend fun createSession(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Body requestToken: TokenResponse,
+    ) : SessionResponse
+
+    @DELETE("/3/authentication/session/new")
+    suspend fun deleteSession(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Body sessionID: SessionResponse,
+    )
+
+    // User
+
+    /*@GET("/3/account")
+    suspend fun getAccountDetails(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") sessionId: String,
+    ) : AccountDetailsResponse*/
+
+    @Headers("Content-Type: application/json;charset=utf-8")
+    @POST("/3/account/{account_id}/favorite")
+    suspend fun markAsFavorite(
+        @Path("account_id") accountId: String? = null,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") sessionId: String,
+        @Body favoriteRequest: FavoriteRequest
+    )
+
+    @GET("/3/account/{account_id}/favorite/movies")
+    suspend fun getFavoriteMovies(
+        @Path("account_id") accountId: String? = null,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") sessionId: String,
+        @Query("language") language: String? = null,
+        @Query("sort_by") sortBy: String? = null,
+        @Query("page") page: Int? = null,
+    ) : MovieResponse
+
+    @GET("/3/account/{account_id}/favorite/tv")
+    suspend fun getFavoriteSeries(
+        @Path("account_id") accountId: String? = null,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") sessionId: String,
+        @Query("language") language: String? = null,
+        @Query("sort_by") sortBy: String? = null,
+        @Query("page") page: Int? = null,
+    ) : SeriesResponse
 
 }

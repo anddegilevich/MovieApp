@@ -7,7 +7,8 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Movie"
         android:textSize="16sp"
@@ -16,5 +17,12 @@
         android:padding="6dp"
         android:textColor="?attr/secondaryTextColor"
         />
+
+    <CheckBox
+        android:id="@+id/checkbox_favorite"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="4dp"
+        android:button="@drawable/select_like"/>
 
 </LinearLayout>
