@@ -31,7 +31,7 @@ interface AppDao {
     fun deleteUnusedMovies()
 
     @Query("SELECT * FROM movies WHERE title LIKE '%' || :query || '%'")
-    fun searchMovies(query: String) : Flow<List<Movie>>
+    suspend fun searchMovies(query: String) : List<Movie>
 
     //SeriesId
 
@@ -53,6 +53,6 @@ interface AppDao {
     fun deleteUnusedSeries()
 
     @Query("SELECT * FROM series WHERE name LIKE '%' || :query || '%'")
-    fun searchSeries(query: String) : Flow<List<Series>>
+    suspend fun searchSeries(query: String) : List<Series>
 
 }

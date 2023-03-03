@@ -5,6 +5,8 @@ import com.ckds.movieapp.data.api.AppApi
 import com.ckds.movieapp.data.db.AppDatabase
 import com.ckds.movieapp.data.db.entities.StoredMovies
 import com.ckds.movieapp.data.db.entities.StoredSeries
+import com.ckds.movieapp.data.model.movie.Movie
+import com.ckds.movieapp.data.model.series.Series
 import com.ckds.movieapp.utils.networkBoundResource
 import kotlinx.coroutines.delay
 import javax.inject.Inject
@@ -38,16 +40,13 @@ class Repository @Inject constructor(
         }
     )
 
-    fun searchMovies(query: String, page: Int? = null) = networkBoundResource(
-        query = {
-            appDao.searchMovies(query = query)
-        },
-        fetch = {
-            delay(1000)
+    suspend fun searchMovies(query: String, page: Int? = null): List<Movie> {
+        return try {
             appApi.searchMovies(query = query, page = page).movies
-        },
-        saveFetchResult = {}
-    )
+        } catch (throwable: Throwable) {
+            appDao.searchMovies(query = query)
+        }
+    }
 
     suspend fun getMovieDetails(movieId: Int) = appApi.getMovieDetails(movieId = movieId)
 
@@ -75,16 +74,13 @@ class Repository @Inject constructor(
         }
     )
 
-    fun searchSeries(query: String, page: Int? = null) = networkBoundResource(
-        query = {
-            appDao.searchSeries(query = query)
-        },
-        fetch = {
-            delay(1000)
+    suspend fun searchSeries(query: String, page: Int? = null): List<Series> {
+        return try {
             appApi.searchSeries(query = query, page = page).series
-        },
-        saveFetchResult = {}
-        )
+        } catch (throwable: Throwable) {
+            appDao.searchSeries(query = query)
+        }
+    }
 
     suspend fun getSeriesDetails(tvId: Int) =
         appApi.getSeriesDetails(tvId = tvId)

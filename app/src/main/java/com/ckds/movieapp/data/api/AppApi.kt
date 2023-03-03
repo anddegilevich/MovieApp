@@ -83,7 +83,7 @@ interface AppApi {
         @Query("language") language: String? = null,
         @Query("append_to_response") appendToResponse: String? = null,
         @Query("format") format: String = "json",
-    ) : Response<SeriesDetailsResponse>
+    ) : SeriesDetailsResponse
 
     @GET("/3/tv/{tv_id}/credits")
     suspend fun getSeriesCredits(
@@ -91,6 +91,6 @@ interface AppApi {
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String? = null,
         @Query("format") format: String = "json",
-    ) : Response<CreditsResponse>
+    ) : CreditsResponse
 
 }

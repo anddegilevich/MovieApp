@@ -131,6 +131,18 @@
                     tools:itemCount="5"
                     />
 
+                <TextView
+                    android:visibility="invisible"
+                    android:id="@+id/tv_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="error"
+                    android:textSize="16sp"
+                    android:padding="6dp"
+                    android:textColor="?attr/secondaryTextColor"
+                    android:textAlignment="center"/>
+
+
             </LinearLayout>
 
         </LinearLayout>

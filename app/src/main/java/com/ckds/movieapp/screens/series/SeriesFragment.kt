@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -13,7 +14,11 @@ import com.ckds.movieapp.databinding.FragmentSeriesBinding
 import com.ckds.movieapp.screens.adapters.ActorsAdapter
 import com.ckds.movieapp.screens.adapters.GenresAdapter
 import com.ckds.movieapp.utils.Constants
+import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 @AndroidEntryPoint
 class SeriesFragment : Fragment() {
@@ -48,18 +53,28 @@ class SeriesFragment : Fragment() {
                 initDetails(tvId = tvId!!)
                 initCastAdapter(tvId = tvId)
             }
-
         }
     }
 
     private fun initCastAdapter(tvId: Int) {
-        viewModel.getCast(tvId = tvId)
+        viewModel.getCredits(tvId = tvId)
         adapterCast = ActorsAdapter()
-        mBinding.rvActors.apply {
-            adapter = adapterCast
-        }
-        viewModel.castLiveData.observe(viewLifecycleOwner) { cast ->
-            adapterCast.differ.submitList(cast)
+        mBinding.apply {
+            rvActors.apply {
+                adapter = adapterCast
+            }
+            viewModel.creditsLiveData.observe(viewLifecycleOwner) { resource ->
+                adapterCast.differ.submitList(resource.data?.cast)
+                tvError.apply {
+                    isVisible = resource is Resource.Error
+                    text = when (resource.error) {
+                        is UnknownHostException -> getString(R.string.unknown_host_exception)
+                        is ConnectException -> getString(R.string.connect_exception)
+                        is SocketTimeoutException -> getString(R.string.socket_timeout_exception)
+                        else -> resource.error.toString()
+                    }
+                }
+            }
         }
     }
 
@@ -69,13 +84,15 @@ class SeriesFragment : Fragment() {
         mBinding.rvGenre.apply {
             adapter = adapterGenres
         }
-        viewModel.detailsLiveData.observe(viewLifecycleOwner) { details ->
+        viewModel.detailsLiveData.observe(viewLifecycleOwner) { resource ->
             mBinding.apply {
-                tvYears.text = "${details.first_air_date.subSequence(0,4)} -" +
-                        " ${details.last_air_date.subSequence(0,4)}"
-                tvSeasons.text = "${details.seasons.size} seasons"
+                resource.data?.let { details ->
+                    tvYears.text = "${details.first_air_date.subSequence(0,4)} -" +
+                            " ${details.last_air_date.subSequence(0,4)}"
+                    tvSeasons.text = "${details.seasons.size} seasons"
+                    adapterGenres.differ.submitList(details.genres)
+                }
             }
-            adapterGenres.differ.submitList(details.genres)
         }
     }
 }

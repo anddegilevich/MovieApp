@@ -7,6 +7,7 @@ import com.ckds.movieapp.data.model.series.Series
 import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,16 +19,24 @@ class SearchViewModel @Inject constructor(private val repository: Repository): V
 
     fun searchMovies(query: String) {
         viewModelScope.launch {
-            repository.searchMovies(query = query).collect{ resource ->
-                searchedMovies.postValue(resource)
+            searchedMovies.postValue(Resource.Loading())
+            try {
+                val response = repository.searchMovies(query = query)
+                searchedMovies.postValue(Resource.Success(data = response))
+            } catch (throwable: Throwable) {
+                searchedMovies.postValue(Resource.Error(throwable = throwable))
             }
         }
     }
 
     fun searchSeries(query: String) = viewModelScope.launch {
         viewModelScope.launch {
-            repository.searchSeries(query = query).collect{ resource ->
-                searchedSeries.postValue(resource)
+            searchedSeries.postValue(Resource.Loading())
+            try {
+                val response = repository.searchSeries(query = query)
+                searchedSeries.postValue(Resource.Success(data = response))
+            } catch (throwable: Throwable) {
+                searchedSeries.postValue(Resource.Error(throwable = throwable))
             }
         }
     }

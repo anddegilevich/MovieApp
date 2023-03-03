@@ -76,24 +76,15 @@ class SearchFragment : Fragment() {
 
             viewModel.searchedMovies.observe(viewLifecycleOwner) { resource ->
                 adapterSearchMovies.differ.submitList(resource.data)
-            progressBarMovies.isVisible = resource is Resource.Loading && resource.data.isNullOrEmpty()
-                tvErrorMovies.apply {
-                    isVisible = resource is Resource.Error && resource.data.isNullOrEmpty()
-                    text = when (resource.error) {
-                        is UnknownHostException -> getString(R.string.unknown_host_exception)
-                        is ConnectException -> getString(R.string.connect_exception)
-                        is SocketTimeoutException -> getString(R.string.socket_timeout_exception)
-                        else -> resource.error.toString()
-                    }
+
+                adapterSearchMovies.setOnItemClickListener {
+                    val bundle = bundleOf("movie" to it)
+                    view.findNavController()
+                        .navigate(R.id.action_searchFragment_to_movieFragment, bundle)
                 }
             }
 
-            adapterSearchMovies.setOnItemClickListener {
-                val bundle = bundleOf("movie" to it)
-                view.findNavController().navigate(R.id.action_searchFragment_to_movieFragment, bundle)
-            }
         }
-
     }
 
     private fun initSeriesAdapter(view: View) {
@@ -106,16 +97,6 @@ class SearchFragment : Fragment() {
 
             viewModel.searchedSeries.observe(viewLifecycleOwner) { resource ->
                 adapterSearchSeries.differ.submitList(resource.data)
-                progressBarSeries.isVisible = resource is Resource.Loading && resource.data.isNullOrEmpty()
-                tvErrorSeries.apply {
-                    isVisible = resource is Resource.Error && resource.data.isNullOrEmpty()
-                    text = when (resource.error) {
-                        is UnknownHostException -> getString(R.string.unknown_host_exception)
-                        is ConnectException -> getString(R.string.connect_exception)
-                        is SocketTimeoutException -> getString(R.string.socket_timeout_exception)
-                        else -> resource.error.toString()
-                    }
-                }
             }
 
             adapterSearchSeries.setOnItemClickListener {

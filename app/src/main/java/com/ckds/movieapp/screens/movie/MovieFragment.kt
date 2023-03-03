@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -13,8 +14,12 @@ import com.ckds.movieapp.databinding.FragmentMovieBinding
 import com.ckds.movieapp.screens.adapters.ActorsAdapter
 import com.ckds.movieapp.screens.adapters.GenresAdapter
 import com.ckds.movieapp.utils.Constants
+import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.item_poster.view.*
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 @AndroidEntryPoint
 class MovieFragment : Fragment() {
@@ -60,11 +65,22 @@ class MovieFragment : Fragment() {
     private fun initCastAdapter(movieId: Int) {
         viewModel.getCredits(movieId = movieId)
         adapterCast = ActorsAdapter()
-        mBinding.rvActors.apply {
-            adapter = adapterCast
-        }
-        viewModel.creditsLiveData.observe(viewLifecycleOwner) { resource ->
-            adapterCast.differ.submitList(resource.data?.cast)
+        mBinding.apply {
+            rvActors.apply {
+                adapter = adapterCast
+            }
+            viewModel.creditsLiveData.observe(viewLifecycleOwner) { resource ->
+                adapterCast.differ.submitList(resource.data?.cast)
+                tvError.apply {
+                    isVisible = resource is Resource.Error
+                    text = when (resource.error) {
+                        is UnknownHostException -> getString(R.string.unknown_host_exception)
+                        is ConnectException -> getString(R.string.connect_exception)
+                        is SocketTimeoutException -> getString(R.string.socket_timeout_exception)
+                        else -> resource.error.toString()
+                    }
+                }
+            }
         }
     }
 
