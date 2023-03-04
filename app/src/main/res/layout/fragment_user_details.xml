@@ -14,6 +14,40 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <androidx.cardview.widget.CardView
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:elevation="12dp"
+                app:cardCornerRadius="60dp"
+                android:innerRadius="0dp"
+                android:shape="ring"
+                android:thicknessRatio="1.9">
+
+                <ImageView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:id="@+id/img_avatar"
+                    tools:src="@drawable/no_image_sample"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true">
+                </ImageView>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Login"
+                android:textSize="20sp"
+                android:padding="6dp"
+                android:textColor="?attr/mainTextColor"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:maxLines="1"/>
+
             <Button
                 android:id="@+id/btn_log_out"
                 android:layout_width="wrap_content"

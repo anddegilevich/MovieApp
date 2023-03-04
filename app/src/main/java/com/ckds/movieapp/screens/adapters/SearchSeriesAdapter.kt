@@ -3,8 +3,6 @@ package com.ckds.movieapp.screens.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ckds.movieapp.R
-import kotlinx.android.synthetic.main.item_poster.view.*
-import kotlinx.android.synthetic.main.item_search.view.*
 import kotlinx.android.synthetic.main.item_search.view.checkbox_favorite
 import kotlinx.android.synthetic.main.item_search.view.tv_name
 import kotlinx.coroutines.MainScope
@@ -28,6 +26,7 @@ class SearchSeriesAdapter(override val viewModel: AdapterViewModel) : SeriesAdap
             setOnClickListener {
                 onItemClickListener?.let { it(series) }
             }
+
             MainScope().launch {
                 val favorite = MainScope().async {viewModel.checkIfSeriesIsFavorite(series.id!!)}
                 checkbox_favorite.isChecked = favorite.await()

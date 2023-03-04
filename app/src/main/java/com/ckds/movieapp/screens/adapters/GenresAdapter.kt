@@ -45,9 +45,4 @@ class GenresAdapter: RecyclerView.Adapter<GenresAdapter.ViewHolder>() {
         return differ.currentList.size
     }
 
-    private var onItemClickListener: ((Genre) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (Genre) -> Unit) {
-        onItemClickListener = listener
-    }
 }

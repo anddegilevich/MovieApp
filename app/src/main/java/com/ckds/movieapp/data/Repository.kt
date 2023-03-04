@@ -7,7 +7,6 @@ import com.ckds.movieapp.data.db.AppDatabase
 import com.ckds.movieapp.data.db.entities.StoredMovie
 import com.ckds.movieapp.data.db.entities.StoredSeries
 import com.ckds.movieapp.data.model.auth.AuthRequest
-import com.ckds.movieapp.data.model.auth.SessionResponse
 import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.data.model.series.Series
 import com.ckds.movieapp.data.model.user.FavoriteRequest
@@ -194,6 +193,11 @@ class Repository @Inject constructor(
     }
 
     // User
+
+    suspend fun getAccountDetails() =
+        appDao.getSession().session_id.let { sessionId ->
+            appApi.getAccountDetails(sessionId = sessionId)
+        }
 
     fun getFavoriteMovies() = networkBoundResource(
         query = {

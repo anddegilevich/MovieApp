@@ -1,12 +1,17 @@
 package com.ckds.movieapp.screens.user
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.ckds.movieapp.R
 import com.ckds.movieapp.databinding.FragmentUserBinding
 import com.ckds.movieapp.screens.adapters.AdapterViewModel
@@ -14,6 +19,7 @@ import com.ckds.movieapp.screens.adapters.MoviesAdapter
 import com.ckds.movieapp.screens.adapters.SeriesAdapter
 import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_user_details.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -74,12 +80,22 @@ class UserFragment : Fragment() {
                             else -> success.error.toString()
                         }
                         success.data?.let { if (it) {
-                            mBinding.vfUser.displayedChild = 1
-                            initMoviesAdapter()
-                            initSeriesAdapter()
-                        }}
+                                mBinding.vfUser.displayedChild = 1
+                                initMoviesAdapter()
+                                initSeriesAdapter()
+                                initAccountDetails()
+                            }
+                        }
                     }
                 }
+            }
+
+            tvSignIn.setOnClickListener {
+                val browserIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.themoviedb.org/signup")
+                )
+                context?.startActivity(browserIntent)
             }
         }
     }
@@ -89,10 +105,13 @@ class UserFragment : Fragment() {
             btnLogOut.setOnClickListener {
                 viewModel.logOut()
                 mBinding.vfUser.displayedChild = 0
+                mBinding.auth.tvError.text = ""
             }
+
             if (viewModel.checkSessionState()) {
                 initMoviesAdapter()
                 initSeriesAdapter()
+                initAccountDetails()
             }
         }
     }
@@ -118,6 +137,12 @@ class UserFragment : Fragment() {
                         else -> resource.error.toString()
                     }
                 }
+            }
+
+            adapterFavoriteMovies.setOnItemClickListener {
+                val bundle = bundleOf("movie" to it)
+                view?.findNavController()
+                    ?.navigate(R.id.action_userFragment_to_movieFragment, bundle)
             }
         }
 
@@ -145,8 +170,29 @@ class UserFragment : Fragment() {
                     }
                 }
             }
+
+            adapterFavoriteSeries.setOnItemClickListener {
+                val bundle = bundleOf("series" to it)
+                view?.findNavController()
+                    ?.navigate(R.id.action_userFragment_to_seriesFragment, bundle)
+            }
         }
 
+    }
+
+    private fun initAccountDetails() {
+        viewModel.getDetails()
+        viewModel.detailsLiveData.observe(viewLifecycleOwner) { resource ->
+            resource.data?.let { details ->
+                mBinding.details.apply {
+                    tv_login.text = details.username
+                    view?.let {
+                        Glide.with(it).load(details.avatar.gravatar.hash)
+                            .error(R.drawable.no_image_sample).into(imgAvatar)
+                    }
+                }
+            }
+        }
     }
 
 }

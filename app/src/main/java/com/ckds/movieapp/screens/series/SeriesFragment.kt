@@ -16,7 +16,6 @@ import com.ckds.movieapp.screens.adapters.GenresAdapter
 import com.ckds.movieapp.utils.Constants
 import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.item_poster.view.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

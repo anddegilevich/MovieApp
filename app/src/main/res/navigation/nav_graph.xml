@@ -33,7 +33,14 @@
         android:id="@+id/userFragment"
         android:name="com.ckds.movieapp.screens.user.UserFragment"
         android:label="fragment_user"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_userFragment_to_movieFragment"
+            app:destination="@id/movieFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_seriesFragment"
+            app:destination="@id/seriesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/movieFragment"
         android:name="com.ckds.movieapp.screens.movie.MovieFragment"

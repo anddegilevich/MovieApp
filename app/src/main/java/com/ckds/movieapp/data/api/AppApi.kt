@@ -9,6 +9,7 @@ import com.ckds.movieapp.data.model.movie.MovieResponse
 import com.ckds.movieapp.data.model.series.SeriesResponse
 import com.ckds.movieapp.data.model.auth.TokenResponse
 import com.ckds.movieapp.data.model.user.FavoriteRequest
+import com.ckds.movieapp.data.model.user.UserDetailsResponse
 import com.ckds.movieapp.utils.Constants.Companion.API_KEY
 import retrofit2.http.*
 
@@ -112,11 +113,11 @@ interface AppApi {
 
     // User
 
-    /*@GET("/3/account")
+    @GET("/3/account")
     suspend fun getAccountDetails(
         @Query("api_key") apiKey: String = API_KEY,
         @Query("session_id") sessionId: String,
-    ) : AccountDetailsResponse*/
+    ) : UserDetailsResponse
 
     @Headers("Content-Type: application/json;charset=utf-8")
     @POST("/3/account/{account_id}/favorite")

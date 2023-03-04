@@ -1,6 +1,5 @@
 package com.ckds.movieapp.data.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.Dao
 import com.ckds.movieapp.data.db.entities.StoredMovie

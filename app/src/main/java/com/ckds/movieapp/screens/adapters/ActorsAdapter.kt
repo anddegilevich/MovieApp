@@ -46,9 +46,4 @@ class ActorsAdapter: RecyclerView.Adapter<ActorsAdapter.ViewHolder>() {
         return differ.currentList.size
     }
 
-    private var onItemClickListener: ((Cast) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (Cast) -> Unit) {
-        onItemClickListener = listener
-    }
 }

@@ -4,13 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ckds.movieapp.data.Repository
-import com.ckds.movieapp.data.model.credits.Cast
 import com.ckds.movieapp.data.model.credits.CreditsResponse
 import com.ckds.movieapp.data.model.details.movie.MovieDetailsResponse
 import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,6 +52,5 @@ class MovieViewModel @Inject constructor(private val repository: Repository): Vi
 
     suspend fun checkIfMovieIsFavorite(movieId: Int) =
         repository.checkIfMovieIsFavorite(movieId = movieId)
-
 
 }
