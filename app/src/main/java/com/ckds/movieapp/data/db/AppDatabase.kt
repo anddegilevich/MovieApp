@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.ckds.movieapp.data.db.converters.Converters
 import com.ckds.movieapp.data.db.entities.StoredMovie
 import com.ckds.movieapp.data.db.entities.StoredSeries
+import com.ckds.movieapp.data.model.auth.SessionResponse
 import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.data.model.series.Series
 
@@ -13,7 +14,8 @@ import com.ckds.movieapp.data.model.series.Series
     StoredMovie::class,
     Movie::class,
     StoredSeries::class,
-    Series::class],
+    Series::class,
+    SessionResponse::class],
     version = 1,
     exportSchema = true)
 @TypeConverters(Converters::class)

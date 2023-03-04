@@ -19,26 +19,22 @@ class SeriesViewModel @Inject constructor(private val repository: Repository): V
     val creditsLiveData: MutableLiveData<Resource<CreditsResponse>> = MutableLiveData()
 
     fun getDetails(tvId: Int) = viewModelScope.launch {
-        viewModelScope.launch {
-            detailsLiveData.postValue(Resource.Loading())
-            try {
-                val response = repository.getSeriesDetails(tvId = tvId)
-                detailsLiveData.postValue(Resource.Success(data = response))
-            } catch (throwable: Throwable) {
-                detailsLiveData.postValue(Resource.Error(throwable = throwable))
-            }
+        detailsLiveData.postValue(Resource.Loading())
+        try {
+            val response = repository.getSeriesDetails(tvId = tvId)
+            detailsLiveData.postValue(Resource.Success(data = response))
+        } catch (throwable: Throwable) {
+            detailsLiveData.postValue(Resource.Error(throwable = throwable))
         }
     }
 
     fun getCredits(tvId: Int) = viewModelScope.launch {
-        viewModelScope.launch {
-            creditsLiveData.postValue(Resource.Loading())
-            try {
-                val response = repository.getSeriesCredits(tvId = tvId)
-                creditsLiveData.postValue(Resource.Success(data = response))
-            } catch (throwable: Throwable) {
-                creditsLiveData.postValue(Resource.Error(throwable = throwable))
-            }
+        creditsLiveData.postValue(Resource.Loading())
+        try {
+            val response = repository.getSeriesCredits(tvId = tvId)
+            creditsLiveData.postValue(Resource.Success(data = response))
+        } catch (throwable: Throwable) {
+            creditsLiveData.postValue(Resource.Error(throwable = throwable))
         }
     }
 

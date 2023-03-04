@@ -1,9 +1,11 @@
 package com.ckds.movieapp.data.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.Dao
 import com.ckds.movieapp.data.db.entities.StoredMovie
 import com.ckds.movieapp.data.db.entities.StoredSeries
+import com.ckds.movieapp.data.model.auth.SessionResponse
 import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.data.model.series.Series
 import kotlinx.coroutines.flow.Flow
@@ -72,5 +74,17 @@ interface AppDao {
 
     @Query("SELECT * FROM series WHERE name LIKE '%' || :query || '%'")
     suspend fun searchSeries(query: String) : List<Series>
+
+    //Session
+
+    @Query("""SELECT * FROM session LIMIT 1""")
+    fun getSession() : SessionResponse
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSession(session: SessionResponse)
+
+    @Query("DELETE FROM session")
+    fun deleteSession()
+
 
 }

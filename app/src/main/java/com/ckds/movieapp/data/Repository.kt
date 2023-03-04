@@ -1,5 +1,6 @@
 package com.ckds.movieapp.data
 
+import android.content.SharedPreferences
 import androidx.room.withTransaction
 import com.ckds.movieapp.data.api.AppApi
 import com.ckds.movieapp.data.db.AppDatabase
@@ -15,7 +16,8 @@ import kotlinx.coroutines.delay
 import javax.inject.Inject
 class Repository @Inject constructor(
     private val appApi: AppApi,
-    private val appDb: AppDatabase
+    private val appDb: AppDatabase,
+    private val sharedPreferences: SharedPreferences
 ) {
 
     private val appDao = appDb.getDao()
@@ -118,7 +120,11 @@ class Repository @Inject constructor(
 
     // Auth
 
-    suspend fun authenticate(login: String, password: String): Resource<SessionResponse> {
+    fun getSessionState() = sharedPreferences.getBoolean("SESSION_IS_ACTIVE", false)
+
+    fun setSessionState(state: Boolean) = sharedPreferences.edit().putBoolean("SESSION_IS_ACTIVE", state).apply()
+
+    suspend fun authenticate(login: String, password: String): Resource<Boolean> {
         try {
             appApi.getAuthenticationToken().let { token ->
                 appApi.authenticateToken(authRequest = AuthRequest(
@@ -126,7 +132,13 @@ class Repository @Inject constructor(
                     password = password,
                     request_token = token.request_token)
                 ).let { authToken ->
-                    return Resource.Success(data = appApi.createSession(requestToken = authToken))
+                    setSessionState(state = authToken.success)
+                    val session = appApi.createSession(requestToken = authToken)
+                    session.success.let { success ->
+                        if (success)
+                        appDao.insertSession(session = session)
+                    }
+                    return Resource.Success(data = session.success)
                 }
             }
         } catch (throwable: Throwable) {
@@ -135,6 +147,8 @@ class Repository @Inject constructor(
     }
 
     suspend fun logOut(session: SessionResponse) {
+        setSessionState(state = false)
+        appDao.deleteSession()
         appApi.deleteSession(sessionID = session)
     }
 

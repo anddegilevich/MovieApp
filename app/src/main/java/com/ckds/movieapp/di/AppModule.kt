@@ -1,6 +1,9 @@
 package com.ckds.movieapp.di
 
+import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import androidx.room.Room
 import com.ckds.movieapp.data.api.AppApi
 import com.ckds.movieapp.data.db.AppDatabase
@@ -15,6 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -42,5 +46,11 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context) =
         Room.databaseBuilder(context,AppDatabase::class.java,"app_database").build()
+
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(application: Application?): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(application)
 
 }
