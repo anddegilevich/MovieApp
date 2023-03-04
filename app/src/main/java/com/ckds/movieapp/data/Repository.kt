@@ -10,6 +10,7 @@ import com.ckds.movieapp.data.model.auth.AuthRequest
 import com.ckds.movieapp.data.model.auth.SessionResponse
 import com.ckds.movieapp.data.model.movie.Movie
 import com.ckds.movieapp.data.model.series.Series
+import com.ckds.movieapp.data.model.user.FavoriteRequest
 import com.ckds.movieapp.utils.Resource
 import com.ckds.movieapp.utils.networkBoundResource
 import kotlinx.coroutines.delay
@@ -59,11 +60,29 @@ class Repository @Inject constructor(
     suspend fun addMovieToFavourite(movie: Movie) {
         appDao.addMovieToFavorite(movie = StoredMovie(id = movie.id!!, category = "favorite"))
         appDao.insertMovies(movies = listOf(movie))
+        try {
+            appDao.getSession().let { session ->
+                appApi.markAsFavorite(sessionId = session.session_id,favoriteRequest = FavoriteRequest(
+                    media_type = "movie",
+                    media_id = movie.id,
+                    favorite = true)
+                )
+            }
+        } catch (throwable: Throwable) {}
     }
 
     suspend fun deleteMovieFromFavourite(movieId: Int) {
         appDao.deleteMovieFromFavorite(movieId = movieId)
         appDao.deleteUnusedMovies()
+        try{
+            appDao.getSession().let { session ->
+                appApi.markAsFavorite(sessionId = session.session_id,favoriteRequest = FavoriteRequest(
+                    media_type = "movie",
+                    media_id = movieId,
+                    favorite = false)
+                )
+            }
+        } catch (throwable: Throwable) {}
     }
 
     suspend fun checkIfMovieIsFavorite(movieId: Int) =
@@ -108,11 +127,29 @@ class Repository @Inject constructor(
     suspend fun addSeriesToFavourite(series: Series) {
         appDao.addSeriesToFavorite(series = StoredSeries(id = series.id!!, category = "favorite"))
         appDao.insertSeries(series = listOf(series))
+        try {
+            appDao.getSession().let { session ->
+                appApi.markAsFavorite(sessionId = session.session_id,favoriteRequest = FavoriteRequest(
+                    media_type = "tv",
+                    media_id = series.id,
+                    favorite = true)
+                )
+            }
+        } catch (throwable: Throwable) {}
     }
 
     suspend fun deleteSeriesFromFavourite(tvId: Int) {
         appDao.deleteSeriesFromFavorite(tvId = tvId)
         appDao.deleteUnusedSeries()
+        try {
+            appDao.getSession().let { session ->
+                appApi.markAsFavorite(sessionId = session.session_id,favoriteRequest = FavoriteRequest(
+                    media_type = "tv",
+                    media_id = tvId,
+                    favorite = false)
+                )
+            }
+        }  catch (throwable: Throwable) {}
     }
 
     suspend fun checkIfSeriesIsFavorite(tvId: Int) =
@@ -146,11 +183,61 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun logOut(session: SessionResponse) {
-        setSessionState(state = false)
-        appDao.deleteSession()
-        appApi.deleteSession(sessionID = session)
+    suspend fun logOut() {
+        if (getSessionState()) {
+            appDao.getSession().let { session ->
+                appApi.deleteSession(sessionId = session)
+                setSessionState(state = false)
+                appDao.deleteSession()
+            }
+        }
     }
+
+    // User
+
+    fun getFavoriteMovies() = networkBoundResource(
+        query = {
+            appDao.getStoredMovies("favorite")
+        },
+        fetch = {
+            delay(1000)
+            appDao.getSession().let { session ->
+                appApi.getFavoriteMovies(sessionId = session.session_id).movies
+            }
+        },
+        saveFetchResult = { movies ->
+            appDb.withTransaction {
+                appDao.deleteStoredMoviesIds("favorite")
+                appDao.insertMoviesId(moviesId = movies.map {
+                    StoredMovie(id = it.id!!, category = "favorite"
+                    ) })
+                appDao.insertMovies(movies = movies)
+                appDao.deleteUnusedMovies()
+            }
+        }
+    )
+
+    fun getFavoriteSeries() = networkBoundResource(
+        query = {
+            appDao.getStoredSeries("favorite")
+        },
+        fetch = {
+            delay(1000)
+            appDao.getSession().let { session ->
+                appApi.getFavoriteSeries(sessionId = session.session_id).series
+            }
+        },
+        saveFetchResult = { series ->
+            appDb.withTransaction {
+                appDao.deleteStoredSeriesIds("favorite")
+                appDao.insertPopularSeriesId(series.map {
+                    StoredSeries(id = it.id!!, category = "favorite"
+                    ) })
+                appDao.insertSeries(series)
+                appDao.deleteUnusedSeries()
+            }
+        }
+    )
 
 }
 

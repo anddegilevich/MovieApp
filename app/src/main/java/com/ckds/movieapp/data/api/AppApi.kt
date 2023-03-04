@@ -104,10 +104,10 @@ interface AppApi {
         @Body requestToken: TokenResponse,
     ) : SessionResponse
 
-    @DELETE("/3/authentication/session/new")
+    @HTTP(method = "DELETE", path = "/3/authentication/session", hasBody = true)
     suspend fun deleteSession(
         @Query("api_key") apiKey: String = API_KEY,
-        @Body sessionID: SessionResponse,
+        @Body sessionId: SessionResponse,
     )
 
     // User
@@ -121,7 +121,6 @@ interface AppApi {
     @Headers("Content-Type: application/json;charset=utf-8")
     @POST("/3/account/{account_id}/favorite")
     suspend fun markAsFavorite(
-        @Path("account_id") accountId: String? = null,
         @Query("api_key") apiKey: String = API_KEY,
         @Query("session_id") sessionId: String,
         @Body favoriteRequest: FavoriteRequest
@@ -129,7 +128,6 @@ interface AppApi {
 
     @GET("/3/account/{account_id}/favorite/movies")
     suspend fun getFavoriteMovies(
-        @Path("account_id") accountId: String? = null,
         @Query("api_key") apiKey: String = API_KEY,
         @Query("session_id") sessionId: String,
         @Query("language") language: String? = null,
@@ -139,7 +137,6 @@ interface AppApi {
 
     @GET("/3/account/{account_id}/favorite/tv")
     suspend fun getFavoriteSeries(
-        @Path("account_id") accountId: String? = null,
         @Query("api_key") apiKey: String = API_KEY,
         @Query("session_id") sessionId: String,
         @Query("language") language: String? = null,

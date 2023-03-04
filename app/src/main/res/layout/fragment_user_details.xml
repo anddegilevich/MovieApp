@@ -46,14 +46,39 @@
                     android:padding="6dp"
                     android:textColor="?attr/secondaryTextColor"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_favorite_movies"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="horizontal"
-                    tools:listitem="@layout/item_poster"
-                    tools:itemCount="9"/>
+                    android:layout_height="190dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_favorite_movies"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:orientation="horizontal"
+                        tools:listitem="@layout/item_poster"
+                        tools:itemCount="9"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:visibility="invisible"
+                        android:id="@+id/tv_error_movies"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="16sp"
+                        android:padding="6dp"
+                        android:textColor="?attr/secondaryTextColor"
+                        android:gravity="center"/>
+
+                    <ProgressBar
+                        android:visibility="invisible"
+                        android:id="@+id/progress_bar_movies"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleX="0.5"
+                        android:scaleY="0.5"/>
+                </FrameLayout>
+
 
                 <TextView
                     android:layout_width="match_parent"
@@ -63,14 +88,38 @@
                     android:padding="6dp"
                     android:textColor="?attr/secondaryTextColor"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_favorite_series"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="horizontal"
-                    tools:listitem="@layout/item_poster"
-                    tools:itemCount="9"/>
+                    android:layout_height="190dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_favorite_series"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:orientation="horizontal"
+                        tools:listitem="@layout/item_poster"
+                        tools:itemCount="9"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:visibility="invisible"
+                        android:id="@+id/tv_error_series"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="16sp"
+                        android:padding="6dp"
+                        android:textColor="?attr/secondaryTextColor"
+                        android:gravity="center"/>
+
+                    <ProgressBar
+                        android:visibility="invisible"
+                        android:id="@+id/progress_bar_series"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleX="0.5"
+                        android:scaleY="0.5"/>
+                </FrameLayout>
 
             </LinearLayout>
 

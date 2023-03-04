@@ -78,13 +78,13 @@ interface AppDao {
     //Session
 
     @Query("""SELECT * FROM session LIMIT 1""")
-    fun getSession() : SessionResponse
+    suspend fun getSession() : SessionResponse
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSession(session: SessionResponse)
 
     @Query("DELETE FROM session")
-    fun deleteSession()
+    suspend fun deleteSession()
 
 
 }
